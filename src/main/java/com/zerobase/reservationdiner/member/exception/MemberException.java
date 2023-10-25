@@ -1,6 +1,6 @@
 package com.zerobase.reservationdiner.member.exception;
 
-import com.zerobase.member.type.ErrorCode;
+import com.zerobase.reservationdiner.member.type.ErrorCode;
 import lombok.*;
 
 @Getter

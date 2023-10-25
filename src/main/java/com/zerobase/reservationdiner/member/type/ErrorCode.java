@@ -1,4 +1,4 @@
-package com.zerobase.member.type;
+package com.zerobase.reservationdiner.member.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
