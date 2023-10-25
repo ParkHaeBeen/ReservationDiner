@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootTest
 @Transactional
 public class QuerydslApplicationTests {
@@ -23,12 +26,15 @@ public class QuerydslApplicationTests {
     @Test
     void querydslContextLoadsTest(){
         //given
+        List<MemberGrade> roles=new ArrayList<>();
+        roles.add(MemberGrade.OWNER);
+
         Member member = Member.builder()
                 .memberId("test123")
                 .memberPassword("test123")
                 .memberName("test")
                 .phoneNumber("010-1234-1234")
-                .memberGrade(MemberGrade.CUSTOMER)
+                .roles(roles)
                 .build();
         em.persist(member);
 

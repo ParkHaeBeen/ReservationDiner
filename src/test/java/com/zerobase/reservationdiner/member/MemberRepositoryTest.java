@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -28,12 +30,15 @@ public class MemberRepositoryTest {
     @Rollback(value = false)
     void memberRepositoryTest(){
         //given
+        List<MemberGrade> roles=new ArrayList<>();
+        roles.add(MemberGrade.OWNER);
+
         Member member = Member.builder()
                 .memberId("test123")
                 .memberPassword("test123")
                 .memberName("test")
                 .phoneNumber("010-1234-1234")
-                .memberGrade(MemberGrade.CUSTOMER)
+                .roles(roles)
                 .build();
         em.persist(member);
 
