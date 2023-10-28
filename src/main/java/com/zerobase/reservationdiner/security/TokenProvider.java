@@ -22,7 +22,7 @@ public class TokenProvider {
 
     @Value("${spring.jwt.secret}")
     private String secretKey;
-    private static final long TOKEN_EXPIRE_TIME=1000*60*60;
+    private static final long TOKEN_EXPIRE_TIME=1000*60*60*5;
     private static final String KEY_ROLE="roles";
     private final MemberService memberService;
 
@@ -49,7 +49,7 @@ public class TokenProvider {
         if(!StringUtils.hasText(token)) return false;
 
         Claims claims = parseClaims(token);
-        return claims.getExpiration().before(new Date());
+        return !claims.getExpiration().before(new Date());
     }
     //토근 파스
     private Claims parseClaims(String token){

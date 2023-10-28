@@ -6,6 +6,7 @@ import com.zerobase.reservationdiner.member.domain.QMember;
 import com.zerobase.reservationdiner.member.type.MemberGrade;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @SpringBootTest
 @Transactional
+@Slf4j
 public class QuerydslApplicationTests {
 
     @Autowired
@@ -26,8 +28,8 @@ public class QuerydslApplicationTests {
     @Test
     void querydslContextLoadsTest(){
         //given
-        List<MemberGrade> roles=new ArrayList<>();
-        roles.add(MemberGrade.OWNER);
+        List<String> roles=new ArrayList<>();
+        roles.add(MemberGrade.OWNER.toString());
 
         Member member = Member.builder()
                 .memberId("test123")
@@ -46,6 +48,7 @@ public class QuerydslApplicationTests {
                 .fetchOne();
 
         //then
+        log.info("member grade = {} ",member.getRoles());
         Assertions.assertThat(member).isEqualTo(result);
         Assertions.assertThat(member.getId()).isEqualTo(result.getId());
     }

@@ -1,6 +1,6 @@
 package com.zerobase.reservationdiner.member.exception;
 
-import com.zerobase.reservationdiner.member.type.ErrorCode;
+import com.zerobase.reservationdiner.member.type.MemberErrorCode;
 import lombok.*;
 
 @Getter
@@ -9,11 +9,11 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class MemberException extends RuntimeException {
-    private ErrorCode errorCode;
+    private MemberErrorCode memberErrorCode;
     private String errorMessage;
 
-    public MemberException(ErrorCode errorCode){
-        this.errorCode=errorCode;
-        this.errorMessage=errorCode.getDescription();
+    public MemberException(MemberErrorCode memberErrorCode){
+        this.memberErrorCode = memberErrorCode;
+        this.errorMessage= memberErrorCode.getDescription();
     }
 }

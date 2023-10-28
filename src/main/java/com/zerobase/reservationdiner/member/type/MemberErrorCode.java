@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ErrorCode {
+public enum MemberErrorCode {
     INVALID_MEMBERINFO("아이디와 비밀번호를 확인해주세요."),
     INVALIE_NEWMEMBERINFO("가입 형식에 맞지 않습니다."),
     ARLEADY_EXIST_ID("이미 존재하는 아이디입니다."),

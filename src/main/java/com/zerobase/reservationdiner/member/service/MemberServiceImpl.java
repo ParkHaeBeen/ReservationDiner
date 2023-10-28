@@ -5,16 +5,14 @@ import com.zerobase.reservationdiner.member.dto.MemberInfo;
 import com.zerobase.reservationdiner.member.dto.MemberInput;
 import com.zerobase.reservationdiner.member.exception.MemberException;
 import com.zerobase.reservationdiner.member.repository.MemberRepository;
-import com.zerobase.reservationdiner.member.type.MemberGrade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.zerobase.reservationdiner.member.type.ErrorCode.*;
+import static com.zerobase.reservationdiner.member.type.MemberErrorCode.*;
 
 @Service
 @Slf4j
@@ -52,6 +50,7 @@ public class MemberServiceImpl implements MemberService{
     public MemberInfo.Response authenticate(MemberInfo.Request request) {
         Member member = memberRepository.findByMemberId(request.getMemberId())
                 .orElseThrow(() -> new MemberException(INVALID_MEMBERINFO));
+
         String encPassword = BCrypt.hashpw(request.getMemberPassword(), BCrypt.gensalt());
 
         if(!BCrypt.checkpw(request.getMemberPassword(),member.getPassword())){

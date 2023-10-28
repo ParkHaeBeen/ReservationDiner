@@ -30,8 +30,8 @@ public class MemberRepositoryTest {
     @Rollback(value = false)
     void memberRepositoryTest(){
         //given
-        List<MemberGrade> roles=new ArrayList<>();
-        roles.add(MemberGrade.OWNER);
+        List<String> roles=new ArrayList<>();
+        roles.add(MemberGrade.OWNER.toString());
 
         Member member = Member.builder()
                 .memberId("test123")
