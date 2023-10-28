@@ -18,10 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class WebSecurity{
 
-    @Bean
-    UserAuthenticationFailureHandler getFailureHandler(){
-        return new UserAuthenticationFailureHandler();
-    }
 
     private final MemberService memberService;
     private final JwtAuthenticationFilter authenticationFilter;
@@ -40,6 +36,7 @@ public class WebSecurity{
                 .and()
                 .authorizeRequests()
                 .requestMatchers("/member/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

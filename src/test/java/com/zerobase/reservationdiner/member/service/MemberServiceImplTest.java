@@ -5,6 +5,7 @@ import com.zerobase.reservationdiner.member.dto.MemberInput;
 import com.zerobase.reservationdiner.member.repository.MemberRepository;
 
 import com.zerobase.reservationdiner.member.type.MemberGrade;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -27,13 +28,13 @@ class MemberServiceImplTest {
     @Autowired
     private MemberRepository memberRepository;
 
+
     @Test
     @Rollback(value = false)
     void registerTest(){
         //given
-
-        List<MemberGrade> roles=new ArrayList<>();
-        roles.add(MemberGrade.OWNER);
+        List<String> roles=new ArrayList<>();
+        roles.add(MemberGrade.ROLE_OWNER.toString());
 
         MemberInput member=MemberInput.builder()
                 .roles(roles)

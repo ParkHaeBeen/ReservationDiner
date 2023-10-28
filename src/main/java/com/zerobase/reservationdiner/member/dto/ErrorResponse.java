@@ -1,6 +1,6 @@
 package com.zerobase.reservationdiner.member.dto;
 
-import com.zerobase.reservationdiner.member.type.ErrorCode;
+import com.zerobase.reservationdiner.member.type.MemberErrorCode;
 import lombok.*;
 
 @Getter
@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ErrorResponse {
-    private ErrorCode errorCode;
+    private MemberErrorCode memberErrorCode;
     private String errorMessage;
 }

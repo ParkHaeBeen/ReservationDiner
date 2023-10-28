@@ -1,7 +1,7 @@
 package com.zerobase.reservationdiner.member.exception;
 
 import com.zerobase.reservationdiner.member.dto.ErrorResponse;
-import com.zerobase.reservationdiner.member.type.ErrorCode;
+import com.zerobase.reservationdiner.member.type.MemberErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -12,10 +12,10 @@ public class MemberExceptionHandler{
 
     @ExceptionHandler(MemberException.class)
     public ErrorResponse handleMemberException(MemberException e){
-        log.error("{} is occured",e.getErrorCode());
+        log.error("{} is occured",e.getMemberErrorCode());
 
         return ErrorResponse.builder()
-                        .errorCode(e.getErrorCode())
+                        .memberErrorCode(e.getMemberErrorCode())
                         .errorMessage(e.getErrorMessage())
                         .build();
     }
@@ -25,8 +25,8 @@ public class MemberExceptionHandler{
         log.error("{} is occured",e.getMessage());
 
         return ErrorResponse.builder()
-                .errorMessage(ErrorCode.INTERNAL_SERVER_ERROR.getDescription())
-                .errorCode(ErrorCode.INTERNAL_SERVER_ERROR)
+                .errorMessage(MemberErrorCode.INTERNAL_SERVER_ERROR.getDescription())
+                .memberErrorCode(MemberErrorCode.INTERNAL_SERVER_ERROR)
                 .build();
     }
 
