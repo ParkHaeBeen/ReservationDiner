@@ -31,7 +31,7 @@ public class MemberRepositoryTest {
     void memberRepositoryTest(){
         //given
         List<String> roles=new ArrayList<>();
-        roles.add(MemberGrade.OWNER.toString());
+        roles.add(MemberGrade.ROLE_OWNER.toString());
 
         Member member = Member.builder()
                 .memberId("test123")
