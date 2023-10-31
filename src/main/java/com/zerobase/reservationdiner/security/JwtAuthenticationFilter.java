@@ -20,7 +20,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    //헤더
     public static final String TOKEN_HEADER="Authorization";
+
+    //인증 타입? JWT
     public static final String TOKEN_PREFIX="Bearer ";
     private final TokenProvider tokenProvider;
 

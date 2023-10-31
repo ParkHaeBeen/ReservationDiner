@@ -19,6 +19,9 @@ public class StoreInput {
         private String city;
 
         @NotBlank
+        private String ownerId;
+
+        @NotBlank
         private String street;
 
         @NotBlank
@@ -34,6 +37,7 @@ public class StoreInput {
                         .storeDescription(input.description)
                         .street(input.street)
                         .zipcode(input.zipcode)
+                        .ownerId(input.getOwnerId())
                         .build();
         }
 

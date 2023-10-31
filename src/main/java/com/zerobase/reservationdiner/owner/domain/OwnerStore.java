@@ -21,6 +21,9 @@ public class OwnerStore {
     private Long id;
 
     @NotBlank
+    private String ownerId;
+
+    @NotBlank
     private String storeName;
 
     @NotBlank
