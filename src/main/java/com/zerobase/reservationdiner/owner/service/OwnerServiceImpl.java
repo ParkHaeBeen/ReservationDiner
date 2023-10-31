@@ -27,4 +27,5 @@ public class OwnerServiceImpl implements OwnerService{
         ownerRepository.save(newStore);
 
     }
+
 }

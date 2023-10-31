@@ -3,9 +3,11 @@ package com.zerobase.reservationdiner.owner.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
@@ -37,4 +39,8 @@ public class OwnerStore {
 
     @Size(min = 10)
     private String storeDescription;
+
+    @ColumnDefault("0")
+    @Max(5)
+    private Double star;
 }
