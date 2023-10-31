@@ -57,6 +57,9 @@ public class MemberServiceImpl implements MemberService{
             throw new MemberException(INVALID_MEMBERINFO);
         }
 
-        return MemberInfo.Response.builder().memberName(member.getMemberName()).build();
+        return MemberInfo.Response.builder()
+                .memberName(member.getMemberName())
+                .roles(member.getRoles())
+                .build();
     }
 }
