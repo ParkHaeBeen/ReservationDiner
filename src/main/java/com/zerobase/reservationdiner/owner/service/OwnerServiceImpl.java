@@ -18,7 +18,7 @@ public class OwnerServiceImpl implements OwnerService{
 
     @Override
     public void registerStore(StoreInput input) {
-        boolean exist = ownerRepository.existsByStoreNameAndZipcode(input.getStoreName(), input.getZipcode());
+        boolean exist = ownerRepository.existsByStoreNameAndAddressZipcode(input.getStoreName(), input.getAddress().getZipcode());
 
         if(exist) {
             throw new OwnerException(OwnerErrorCode.ALREADY_EXIST);
