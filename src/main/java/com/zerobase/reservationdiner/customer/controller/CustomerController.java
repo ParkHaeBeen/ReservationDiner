@@ -2,7 +2,7 @@ package com.zerobase.reservationdiner.customer.controller;
 
 import com.zerobase.reservationdiner.customer.dto.CustomerSite;
 import com.zerobase.reservationdiner.customer.dto.StoreInfo;
-import com.zerobase.reservationdiner.customer.repository.CustomerRepository;
+
 import com.zerobase.reservationdiner.customer.service.CustomerService;
 import com.zerobase.reservationdiner.owner.exception.OwnerException;
 import com.zerobase.reservationdiner.owner.repository.OwnerRepository;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -26,9 +28,10 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping("/store")
-    public StoreInfo getAllStore(@RequestBody CustomerSite site){
-        customerService.getAllStore(site.getLatitude(),site.getLongtitude());
+    public List<StoreInfo> getAllStore(@RequestBody CustomerSite site){
+        List<StoreInfo> allStores = customerService.getAllStore(site.getLatitude(), site.getLongtitude());
 
+        return allStores;
     }
 
     private static void checkBindResultErrors(BindingResult result) {

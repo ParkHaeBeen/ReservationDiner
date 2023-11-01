@@ -1,8 +1,6 @@
 package com.zerobase.reservationdiner.owner.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -28,14 +26,9 @@ public class OwnerStore {
     @NotBlank
     private String storeName;
 
-    @NotBlank
-    private String city;
-
-    @NotBlank
-    private String street;
-
-    @NotBlank
-    private String zipcode;
+    @Enumerated(EnumType.STRING)
+    @Embedded
+    private Address address;
 
     @Size(min = 10)
     private String storeDescription;

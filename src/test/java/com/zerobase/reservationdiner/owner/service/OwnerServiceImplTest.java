@@ -1,5 +1,6 @@
 package com.zerobase.reservationdiner.owner.service;
 
+import com.zerobase.reservationdiner.owner.domain.Address;
 import com.zerobase.reservationdiner.owner.domain.OwnerStore;
 import com.zerobase.reservationdiner.owner.dto.StoreInput;
 import com.zerobase.reservationdiner.owner.exception.OwnerException;
@@ -27,16 +28,23 @@ class OwnerServiceImplTest {
     private OwnerService ownerService;
 
     @Test
-    @Rollback(value = false)
     void registerSuccessTest(){
         //given
-        StoreInput newStore = StoreInput.builder()
-                .storeName("test 점포123")
+        Address address= Address.builder()
                 .city("서울")
-                .street("아아동")
-                .zipcode("12345")
-                .description("맛있다.너무 맜있다.짱봉 팔아요")
+                .street("street1")
+                .zipcode("1485")
+                .lat(127.0)
+                .lnt(45.0)
                 .build();
+
+        StoreInput newStore=StoreInput.builder()
+                .address(address)
+                .ownerId("test123")
+                .storeName("맛나 분식")
+                .description("떡복이,김밥, 돈까스 전문점입니다.")
+                .build();
+
         //when
         ownerService.registerStore(newStore);
 
@@ -44,26 +52,31 @@ class OwnerServiceImplTest {
 
         //then
         Assertions.assertNotNull(byStoreName);
-        Assertions.assertEquals(newStore.getZipcode(),byStoreName.get().getZipcode());
+        Assertions.assertEquals(newStore.getAddress().getZipcode(),byStoreName.get().getAddress().getZipcode());
     }
 
     @Test
-    @Rollback(value = false)
     void registerFailByNameAndZipCodeTest(){
         //given
-        StoreInput newStore = StoreInput.builder()
-                .storeName("test 점포")
+        Address address= Address.builder()
                 .city("서울")
-                .street("아아동")
-                .zipcode("15477")
-                .description("맛있다.너무맛있다 피자 팔아요 피자")
+                .street("street1")
+                .zipcode("1485")
+                .lat(127.0)
+                .lnt(45.0)
+                .build();
+
+        StoreInput newStore=StoreInput.builder()
+                .address(address)
+                .ownerId("test123")
+                .storeName("맛나 분식")
+                .description("떡복이,김밥, 돈까스 전문점입니다.")
                 .build();
 
         StoreInput failStore = StoreInput.builder()
-                .storeName("test 점포")
-                .city("서울")
-                .street("어야동")
-                .zipcode("15477")
+                .storeName("맛나 분식")
+                .ownerId("test123")
+                .address(address)
                 .description("맛있었다.치킨 빠삭하게 팔아요.")
                 .build();
         //when

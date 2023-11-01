@@ -7,6 +7,7 @@ import com.zerobase.reservationdiner.member.dto.MemberInput;
 import com.zerobase.reservationdiner.member.repository.MemberRepository;
 import com.zerobase.reservationdiner.member.service.MemberService;
 import com.zerobase.reservationdiner.member.type.MemberGrade;
+import com.zerobase.reservationdiner.owner.domain.Address;
 import com.zerobase.reservationdiner.owner.dto.StoreInput;
 import com.zerobase.reservationdiner.owner.service.OwnerService;
 import com.zerobase.reservationdiner.security.TokenProvider;
@@ -57,10 +58,16 @@ class OwnerControllerTest {
     @WithMockUser(username = "test123",roles = {"OWNER"})
     void registerSuccessTest() throws Exception{
         //given
+        Address address= Address.builder()
+                .city("서울")
+                .street("street1")
+                .zipcode("1485")
+                .lat(127.0)
+                .lnt(45.0)
+                .build();
+
         StoreInput newStore=StoreInput.builder()
-                .zipcode("121345")
-                .street("남산동")
-                .city("서울시")
+                .address(address)
                 .ownerId("test123")
                 .storeName("맛나 분식")
                 .description("떡복이,김밥, 돈까스 전문점입니다.")
