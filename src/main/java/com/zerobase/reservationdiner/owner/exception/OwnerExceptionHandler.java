@@ -13,6 +13,7 @@ public class OwnerExceptionHandler {
     @ExceptionHandler(OwnerException.class)
     public OwnerErrorResponse handleOwnerException(OwnerException e){
         log.error("{} is occured",e.getMessage());
+        log.error("{} is occured",e.getErrorMesaage());
 
         return OwnerErrorResponse.builder()
                 .ownerErrorCode(e.getOwnerErrorCode())

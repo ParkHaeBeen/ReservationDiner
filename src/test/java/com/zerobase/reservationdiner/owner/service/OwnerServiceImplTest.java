@@ -1,21 +1,18 @@
 package com.zerobase.reservationdiner.owner.service;
 
-import com.zerobase.reservationdiner.owner.domain.Address;
 import com.zerobase.reservationdiner.owner.domain.OwnerStore;
+import com.zerobase.reservationdiner.common.dto.AddressDto;
 import com.zerobase.reservationdiner.owner.dto.StoreInput;
 import com.zerobase.reservationdiner.owner.exception.OwnerException;
 import com.zerobase.reservationdiner.owner.repository.OwnerRepository;
-import com.zerobase.reservationdiner.owner.type.OwnerErrorCode;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 
+import java.time.LocalTime;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -30,7 +27,7 @@ class OwnerServiceImplTest {
     @Test
     void registerSuccessTest(){
         //given
-        Address address= Address.builder()
+        AddressDto address= AddressDto.builder()
                 .city("서울")
                 .street("street1")
                 .zipcode("1485")
@@ -42,6 +39,8 @@ class OwnerServiceImplTest {
                 .address(address)
                 .ownerId("test123")
                 .storeName("맛나 분식")
+                .openTime(LocalTime.of(8,0))
+                .closeTime(LocalTime.of(22,0))
                 .description("떡복이,김밥, 돈까스 전문점입니다.")
                 .build();
 
@@ -58,7 +57,7 @@ class OwnerServiceImplTest {
     @Test
     void registerFailByNameAndZipCodeTest(){
         //given
-        Address address= Address.builder()
+        AddressDto address= AddressDto.builder()
                 .city("서울")
                 .street("street1")
                 .zipcode("1485")
@@ -70,6 +69,8 @@ class OwnerServiceImplTest {
                 .address(address)
                 .ownerId("test123")
                 .storeName("맛나 분식")
+                .openTime(LocalTime.of(8,0))
+                .closeTime(LocalTime.of(22,0))
                 .description("떡복이,김밥, 돈까스 전문점입니다.")
                 .build();
 
@@ -78,6 +79,8 @@ class OwnerServiceImplTest {
                 .ownerId("test123")
                 .address(address)
                 .description("맛있었다.치킨 빠삭하게 팔아요.")
+                .openTime(LocalTime.of(8,0))
+                .closeTime(LocalTime.of(22,0))
                 .build();
         //when
         ownerService.registerStore(newStore);

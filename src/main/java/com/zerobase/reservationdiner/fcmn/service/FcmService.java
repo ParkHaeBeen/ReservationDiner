@@ -12,20 +12,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-@Service
+@Component
 @Slf4j
 @RequiredArgsConstructor
 public class FcmService {
 
     private final StringRedisTemplate redisTemplate;
     private static final long TOKEN_EXPIRATION = 3500;
-    private String getAccessToken(String storeId) throws IOException {
+    public String getAccessToken(Long storeId) throws IOException {
 
 
         GoogleCredentials   googleCredentials = GoogleCredentials
@@ -36,7 +37,7 @@ public class FcmService {
         String newToken = googleCredentials.getAccessToken().getTokenValue();
 
         // 새로 생성된 토큰을 Redis에 저장
-        redisTemplate.opsForValue().set(storeId,newToken,TOKEN_EXPIRATION,TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(String.valueOf(storeId),newToken,TOKEN_EXPIRATION,TimeUnit.SECONDS);
         return newToken;
     }
 

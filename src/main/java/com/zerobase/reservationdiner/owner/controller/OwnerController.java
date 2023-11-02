@@ -1,19 +1,20 @@
 package com.zerobase.reservationdiner.owner.controller;
 
+import com.zerobase.reservationdiner.owner.dto.ReserveInfo;
 import com.zerobase.reservationdiner.owner.dto.StoreInput;
+import com.zerobase.reservationdiner.owner.dto.StoreOpen;
 import com.zerobase.reservationdiner.owner.exception.OwnerException;
 import com.zerobase.reservationdiner.owner.service.OwnerService;
 import com.zerobase.reservationdiner.owner.type.OwnerErrorCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/owner")
@@ -31,6 +32,24 @@ public class OwnerController {
         ownerService.registerStore(store);
 
         return ResponseEntity.ok(store.getStoreName());
+    }
+
+    @PostMapping("/openstatus")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<?> realOpen(@Valid @PathVariable StoreOpen open,BindingResult result){
+        checkBindResultErrors(result);
+        ownerService.openAndTimeSlotAdd(open);
+        return ResponseEntity.ok("succeed");
+    }
+
+    @PostMapping("/permitreserve")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<?> permitReserve(@Valid @RequestBody ReserveInfo.Request request,BindingResult result){
+        checkBindResultErrors(result);
+
+        ownerService.permitReservation(request);
+
+        return ResponseEntity.ok("succeed");
     }
 
     private static void checkBindResultErrors(BindingResult result) {
