@@ -1,4 +1,4 @@
-package com.zerobase.reservationdiner.member.domain;
+package com.zerobase.reservationdiner.common.domain;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

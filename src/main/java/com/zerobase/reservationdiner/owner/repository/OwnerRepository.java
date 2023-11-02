@@ -11,4 +11,8 @@ public interface OwnerRepository extends JpaRepository<OwnerStore,Long> ,CustomO
     boolean existsByStoreNameAndAddressZipcode(String storeName,String zipCode);
 
     Optional<OwnerStore> findByStoreName(String storeName);
+
+    Optional<OwnerStore> findByIdAndOwnerId(Long id, String ownerId);
+
+
 }

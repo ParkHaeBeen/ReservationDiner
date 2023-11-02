@@ -1,4 +1,4 @@
-package com.zerobase.reservationdiner.commonconfig;
+package com.zerobase.reservationdiner.common.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

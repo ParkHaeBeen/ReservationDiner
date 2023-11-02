@@ -1,4 +1,4 @@
-package com.zerobase.reservationdiner.commonconfig;
+package com.zerobase.reservationdiner.common.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;

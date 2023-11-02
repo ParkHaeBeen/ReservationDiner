@@ -1,5 +1,6 @@
-package com.zerobase.reservationdiner.customer.dto;
+package com.zerobase.reservationdiner.customer.dto.store;
 
+import com.zerobase.reservationdiner.common.dto.AddressDto;
 import com.zerobase.reservationdiner.owner.domain.Address;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import lombok.*;
 @Builder
 public class StoreInfo {
     private String storeName;
-    private Address address;
+    private AddressDto address;
     private Long storeId;
     private double star;
 }
