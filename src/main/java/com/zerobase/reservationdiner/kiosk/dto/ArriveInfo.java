@@ -1,30 +1,24 @@
-package com.zerobase.reservationdiner.member.dto;
+package com.zerobase.reservationdiner.kiosk.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
-public class MemberInfo {
 
+public class ArriveInfo {
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
     public static class Request{
-
-        @Size(min = 5,max = 10)
         @NotNull
         private String memberId;
-
-        @Size(min = 5,max = 10)
         @NotNull
-        private String memberPassword;
+        private Long ownerStoreId;
 
+        private LocalDateTime arriveTime=LocalDateTime.now();
     }
 
     @Getter
@@ -34,8 +28,9 @@ public class MemberInfo {
     @Builder
     public static class Response{
         private String memberName;
-        private String memberId;
-        private List<String> roles;
+        private LocalDateTime timeSlotTime;
+        private Integer customerCnt;
+        private Long timeSlotId;
     }
 
 }

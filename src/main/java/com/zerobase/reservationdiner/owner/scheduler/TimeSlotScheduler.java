@@ -2,8 +2,8 @@ package com.zerobase.reservationdiner.owner.scheduler;
 
 import com.zerobase.reservationdiner.owner.domain.OwnerStore;
 import com.zerobase.reservationdiner.owner.domain.TimeSlot;
-import com.zerobase.reservationdiner.owner.repository.OwnerRepository;
-import com.zerobase.reservationdiner.owner.repository.TimeSlotRepository;
+import com.zerobase.reservationdiner.owner.repository.owner.OwnerRepository;
+import com.zerobase.reservationdiner.owner.repository.timeslot.TimeSlotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -28,7 +28,7 @@ public class TimeSlotScheduler {
         List<OwnerStore> allStores = ownerRepository.findAll();
 
         for (OwnerStore store : allStores) {
-            if(store.isOpenStatus()) {
+            if(store.getOpenStatus()) {
                 log.info("storeName = {}", store.getStoreName());
                 LocalTime openTime = store.getOpenTime();
                 LocalTime closeTime = store.getCloseTime();

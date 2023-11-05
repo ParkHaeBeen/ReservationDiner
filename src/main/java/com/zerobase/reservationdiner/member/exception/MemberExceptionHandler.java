@@ -22,14 +22,5 @@ public class MemberExceptionHandler{
                         .build();
     }
 
-    @ExceptionHandler(Exception.class)
-    public ErrorResponse handleException(Exception e){
-        log.error("{} is occured",e.getMessage());
-
-        return ErrorResponse.builder()
-                .errorMessage(MemberErrorCode.INTERNAL_SERVER_ERROR.getDescription())
-                .memberErrorCode(MemberErrorCode.INTERNAL_SERVER_ERROR)
-                .build();
-    }
 
 }

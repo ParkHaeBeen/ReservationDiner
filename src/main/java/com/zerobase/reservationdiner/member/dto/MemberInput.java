@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.checkerframework.checker.units.qual.min;
 
 import java.util.List;
 
@@ -19,7 +20,8 @@ public class MemberInput {
 
     @Size(min = 5,max = 10)
     private String id;
-    @Size(min = 5,max = 10)
+    @Size(min = 5, max = 10)
+    @NotNull
     private String password;
     @NotBlank
     private String name;

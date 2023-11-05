@@ -3,6 +3,7 @@ package com.zerobase.reservationdiner.customer.service.reservation;
 import com.zerobase.reservationdiner.customer.domain.Reservation;
 import com.zerobase.reservationdiner.customer.dto.reservation.ReservationInfo;
 import com.zerobase.reservationdiner.customer.repository.reservation.ReservationRepository;
+import com.zerobase.reservationdiner.owner.domain.TimeSlot;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -31,10 +32,16 @@ class ReservationServiceImplTest {
     @Rollback(value = false)
     void reservationStoreSuccesstest(){
         //given
+        TimeSlot timeSlot=TimeSlot.builder()
+                .time(LocalDateTime.now())
+                .store(null)
+                .reserve(null)
+                .build();
+
         ReservationInfo.Request request=ReservationInfo.Request.builder()
-                .storeId(1L)
-                .customerCnt(2)
                 .reservationDate(LocalDateTime.now())
+                .customerCnt(2)
+                .timeslotId(timeSlot.getId())
                 .memberId("test123")
                 .phoneNumber("010-1234-1234")
                 .build();
@@ -46,7 +53,7 @@ class ReservationServiceImplTest {
         //then
         for (Reservation reservation : allReservation) {
             Assertions.assertEquals(response.getCustomerCnt(),reservation.getCustomerCnt());
-            Assertions.assertEquals(response.getReservationDate(),reservation.getReservationDate());
+            Assertions.assertEquals(response.getReservationDate(),reservation.getTimeSlot().getTime());
         }
     }
 

@@ -1,9 +1,9 @@
 package com.zerobase.reservationdiner.customer.domain;
 
 import com.zerobase.reservationdiner.common.domain.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.zerobase.reservationdiner.member.domain.Member;
+import com.zerobase.reservationdiner.owner.domain.TimeSlot;
+import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -26,13 +26,9 @@ public class Reservation extends BaseEntity {
     private Long id;
 
     @NotBlank
-    private String memberId;
-
-    @NotNull
-    private Long storeId;
-
-    @NotNull
-    private LocalDateTime reservationDate;
+    @JoinColumn(name = "member_Id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member;
 
     @NotNull
     private Integer customerCnt;
@@ -41,10 +37,14 @@ public class Reservation extends BaseEntity {
     private String phoneNumber;
 
     @NotNull
-    private Long timeslotId;
+    @JoinColumn(name = "timesolt_Id")
+    @OneToOne(fetch = FetchType.EAGER)
+    private TimeSlot timeSlot;
 
     private Boolean ownercheck=false;
 
     private Boolean cancel=false;
+
+    private Boolean visit=false;
 
 }

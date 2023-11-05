@@ -14,7 +14,4 @@ public class ReserveInfo {
         private Boolean permit;
     }
 
-    static class Response{
-
-    }
 }

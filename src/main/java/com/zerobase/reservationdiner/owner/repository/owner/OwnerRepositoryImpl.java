@@ -1,4 +1,4 @@
-package com.zerobase.reservationdiner.owner.repository;
+package com.zerobase.reservationdiner.owner.repository.owner;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;

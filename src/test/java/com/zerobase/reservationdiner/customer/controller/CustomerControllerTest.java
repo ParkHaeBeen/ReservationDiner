@@ -46,9 +46,9 @@ class CustomerControllerTest {
     void reservationStoreSuccessTest() throws Exception {
         //given
         ReservationInfo.Request request=ReservationInfo.Request.builder()
-                .storeId(1L)
-                .customerCnt(2)
                 .reservationDate(LocalDateTime.now())
+                .customerCnt(2)
+                .timeslotId(1L)
                 .memberId("test123")
                 .phoneNumber("010-1234-1234")
                 .build();

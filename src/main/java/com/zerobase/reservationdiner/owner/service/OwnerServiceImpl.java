@@ -3,17 +3,15 @@ package com.zerobase.reservationdiner.owner.service;
 import com.zerobase.reservationdiner.customer.domain.Reservation;
 import com.zerobase.reservationdiner.customer.exception.store.StoreException;
 import com.zerobase.reservationdiner.customer.repository.reservation.ReservationRepository;
-import com.zerobase.reservationdiner.customer.type.StoreErrorCode;
+import com.zerobase.reservationdiner.member.domain.Member;
+import com.zerobase.reservationdiner.member.repository.MemberRepository;
 import com.zerobase.reservationdiner.owner.domain.OwnerStore;
 import com.zerobase.reservationdiner.owner.domain.TimeSlot;
-import com.zerobase.reservationdiner.owner.dto.ReserveInfo;
-import com.zerobase.reservationdiner.owner.dto.StoreInput;
-import com.zerobase.reservationdiner.owner.dto.StoreOpen;
+import com.zerobase.reservationdiner.owner.dto.*;
 import com.zerobase.reservationdiner.owner.exception.OwnerException;
 import com.zerobase.reservationdiner.owner.exception.ReservePermitException;
-import com.zerobase.reservationdiner.owner.repository.OwnerRepository;
-import com.zerobase.reservationdiner.owner.repository.TimeSlotRepository;
-import com.zerobase.reservationdiner.owner.type.OwnerErrorCode;
+import com.zerobase.reservationdiner.owner.repository.owner.OwnerRepository;
+import com.zerobase.reservationdiner.owner.repository.timeslot.TimeSlotRepository;
 import com.zerobase.reservationdiner.owner.type.ReservePermitErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +20,12 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.spi.ToolProvider;
+import java.util.stream.Collectors;
 
 import static com.zerobase.reservationdiner.customer.type.StoreErrorCode.*;
 import static com.zerobase.reservationdiner.owner.type.OwnerErrorCode.*;
+import static com.zerobase.reservationdiner.owner.type.OwnerErrorCode.ALREADY_OPEN;
 
 @Service
 @Slf4j
@@ -37,25 +35,35 @@ public class OwnerServiceImpl implements OwnerService{
     private final OwnerRepository ownerRepository;
     private final TimeSlotRepository timeSlotRepository;
     private final ReservationRepository reservationRepository;
+    private final MemberRepository memberRepository;
 
     @Override
-    public void registerStore(StoreInput input) {
-        boolean exist = ownerRepository.existsByStoreNameAndAddressZipcode(input.getStoreName(), input.getAddress().getZipcode());
+    @Transactional
+    public StoreRegister registerStore(StoreInput input) {
+        System.out.println(input.getOwnerId());
+        Member owner = memberRepository.findByMemberId(input.getOwnerId()).orElseThrow(() -> new OwnerException(NOEXIST_OWNER));
 
+        boolean exist = ownerRepository.existsByStoreNameAndAddressZipcode(input.getStoreName(), input.getAddress().getZipcode());
+        System.out.println(owner);
         if(exist) {
             throw new OwnerException(ALREADY_EXIST);
         }
         OwnerStore newStore = StoreInput.of(input);
-        ownerRepository.save(newStore);
+        newStore.setOwner(owner);
 
+        OwnerStore ownerStore = ownerRepository.save(newStore);
+        StoreRegister storeRegister = StoreRegister.of(ownerStore);
+
+        return StoreRegister.of(ownerStore);
     }
 
     @Override
     @Transactional
     public void openAndTimeSlotAdd(StoreOpen open) {
-        OwnerStore store = ownerRepository.findByIdAndOwnerId(open.getStoreId(),open.getOwnerId()).orElseThrow(() -> new StoreException(NOTFOUND_STORE));
-        if(store.isOpenStatus()==open.getOpen()) {
-            throw new StoreException(StoreErrorCode.ALREADY_OPEN);
+        Member owner = memberRepository.findByMemberId(open.getOwnerId()).orElseThrow(() -> new StoreException(NOTFOUND_STORE));
+        OwnerStore store = ownerRepository.findByIdAndOwnerId(open.getStoreId(),owner.getId()).orElseThrow(() -> new StoreException(NOTFOUND_STORE));
+        if(store.getOpenStatus()==open.getOpen()) {
+            throw new OwnerException(ALREADY_OPEN);
         }
 
         store.setOpenStatus(open.getOpen());
@@ -94,13 +102,46 @@ public class OwnerServiceImpl implements OwnerService{
         Reservation reservation = reservationRepository.findById(request.getReservationId()).
                 orElseThrow(() -> new ReservePermitException(ReservePermitErrorCode.NOT_EXIST_RESERVE));
 
+        TimeSlot timeSlot = timeSlotRepository.findById(reservation.getTimeSlot().getId())
+                .orElseThrow(() -> new ReservePermitException(ReservePermitErrorCode.NOT_EXIST_TIME));
+
+        validationPermitReservation(request.getPermit(),timeSlot, reservation);
+
+        reservation.setOwnercheck(request.getPermit());
+        if(request.getPermit()) {
+            timeSlot.setReserve(true);
+            timeSlotRepository.save(timeSlot);
+        }
+        reservationRepository.save(reservation);
+    }
+
+    private static void validationPermitReservation(boolean reservationPermit,TimeSlot timeSlot, Reservation reservation) {
+        if(reservationPermit&&timeSlot.getReserve()){
+            throw new ReservePermitException(ReservePermitErrorCode.ALREADY_PERMIT_OTHER_CUSTOMER);
+        }
+
         if(reservation.getOwnercheck()) {
             throw new ReservePermitException(ReservePermitErrorCode.ALREADY_PERMIT);
         }else if(reservation.getCancel()){
-            throw new ReservePermitException(ReservePermitErrorCode.ALREADY_CANCEL_BYCUSTOMER);
+            throw new ReservePermitException(ReservePermitErrorCode.ALREADY_CANCEL);
         }
+    }
 
-        reservation.setOwnercheck(true);
-        reservationRepository.save(reservation);
+    @Override
+    public List<ReserveList.Response> getAllReservation(ReserveList.Request request) {
+        Member member = memberRepository.findByMemberId(request.getOwnerId()).orElseThrow(() -> new OwnerException(NOEXIST_OWNER));
+        OwnerStore store = ownerRepository.findByOwnerIdAndStoreName(member.getId(), request.getStoreName())
+                .orElseThrow(() -> new OwnerException(NOEXIST_OWNER));
+
+        List<TimeSlot> reserveTimeSlots = timeSlotRepository.findByStoreIdAndReserveTrueAndTimeBetween(store.getId(),request.getStartDate(),request.getEndDate());
+        return reserveTimeSlots.stream().map(slot -> ReserveList.Response
+                        .builder()
+                        .customerCnt(slot.getReservation().getCustomerCnt())
+                        .storeName(store.getStoreName())
+                        .customerName(slot.getReservation().getMember().getMemberName())
+                        .phoneNumber(slot.getReservation().getPhoneNumber())
+                        .reserveDate(slot.getReservation().getCreatedAt())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

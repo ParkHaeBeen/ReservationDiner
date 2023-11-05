@@ -4,7 +4,9 @@ import com.zerobase.reservationdiner.common.dto.AddressDto;
 import com.zerobase.reservationdiner.owner.domain.OwnerStore;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,6 +21,7 @@ public class StoreDetailInfo {
     private double star;
     private LocalTime openTime;
     private LocalTime closeTime;
+    private List<LocalDateTime> timeSlots;
 
     public static StoreDetailInfo of(OwnerStore store) {
         return StoreDetailInfo.builder()
