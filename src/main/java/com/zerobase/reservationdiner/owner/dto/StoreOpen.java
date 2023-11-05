@@ -10,5 +10,5 @@ import lombok.*;
 public class StoreOpen {
     private String ownerId;
     private Long storeId;
-    private Boolean open;
+    private Boolean open=false;
 }

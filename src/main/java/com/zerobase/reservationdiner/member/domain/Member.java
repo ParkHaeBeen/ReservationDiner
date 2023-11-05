@@ -1,6 +1,8 @@
 package com.zerobase.reservationdiner.member.domain;
 
 import com.zerobase.reservationdiner.common.domain.BaseEntity;
+import com.zerobase.reservationdiner.customer.domain.Reservation;
+import com.zerobase.reservationdiner.owner.domain.OwnerStore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -10,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +32,7 @@ public class Member extends BaseEntity implements UserDetails {
 
     @Size(min = 5,max = 10)
     private String memberId;
-    @NotBlank
+
     private String memberPassword;
 
     @NotBlank
@@ -42,6 +45,11 @@ public class Member extends BaseEntity implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles;
 
+    @OneToMany(fetch = FetchType.LAZY,mappedBy ="member" )
+    private List<Reservation> reservations=new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "owner")
+    private List<OwnerStore> stores=new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

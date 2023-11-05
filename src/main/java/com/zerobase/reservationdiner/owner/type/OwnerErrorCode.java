@@ -7,7 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum OwnerErrorCode {
 
-    INVALID_STOREINFO("점포 가입 형식에 맞지 않습니다"),
-    ALREADY_EXIST("해당 우편번호에 똑같은 점포 이름이 있습니다.");
+    INVALID_STOREINFO("형식에 맞쳐주세요"),
+    ALREADY_EXIST("해당 우편번호에 똑같은 점포 이름이 있습니다."),
+    NOEXIST_OWNER("해당 레스토랑은 존재하지 않습니다"),
+    ALREADY_OPEN("이미 오픈 되었습니다");
     private final String description;
 }

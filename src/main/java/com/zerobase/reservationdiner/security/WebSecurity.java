@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurity{
 
 
@@ -24,7 +26,7 @@ public class WebSecurity{
     @Bean
     public WebSecurityCustomizer cofigure(){
         return (web)->web.ignoring()
-                .requestMatchers("/mysql-console/**");
+                .requestMatchers("/mysql-console/**","/member/register","/member/login");
     }
 
     @Bean
@@ -35,6 +37,7 @@ public class WebSecurity{
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .requestMatchers("/").permitAll()
                 .requestMatchers("/member/**","/store/**").permitAll()
                 .anyRequest().authenticated()
                 .and()

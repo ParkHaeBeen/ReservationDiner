@@ -21,13 +21,4 @@ public class StoreExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler(Exception.class)
-    public StoreErrorResponse handleException(Exception e){
-        log.error("{} is occured",e.getMessage());
-
-        return StoreErrorResponse.builder()
-                .errorMessage(StoreErrorCode.INTERNAL_SERVER_ERROR.getDescription())
-                .errorCode(StoreErrorCode.INTERNAL_SERVER_ERROR)
-                .build();
-    }
 }

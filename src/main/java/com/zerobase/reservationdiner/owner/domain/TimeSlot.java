@@ -1,5 +1,6 @@
 package com.zerobase.reservationdiner.owner.domain;
 
+import com.zerobase.reservationdiner.customer.domain.Reservation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -18,14 +19,15 @@ public class TimeSlot {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "ownerstore_id")
+    @JoinColumn(name = "ownerstore_Id")
     private OwnerStore store;
+
+    @OneToOne(fetch = FetchType.EAGER,mappedBy = "timeSlot")
+    private Reservation reservation;
 
     @NotNull
     private LocalDateTime time;
 
 
     private Boolean reserve=false;
-
-
 }

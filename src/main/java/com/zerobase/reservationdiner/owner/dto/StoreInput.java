@@ -36,12 +36,12 @@ public class StoreInput {
 
         @NotNull
         private LocalTime closeTime;
+
         public  static OwnerStore of(StoreInput input){
                 return OwnerStore.builder()
                         .storeName(input.storeName)
                         .storeDescription(input.description)
                         .address(AddressDto.of(input.address))
-                        .ownerId(input.getOwnerId())
                         .openTime(input.openTime)
                         .closeTime(input.closeTime)
                         .build();

@@ -16,8 +16,6 @@ public class ReservationInfo {
     @NoArgsConstructor
     @Builder
     public static class Request{
-        @NotNull
-        private Long storeId;
 
         @NotNull
         private LocalDateTime reservationDate;
@@ -37,12 +35,8 @@ public class ReservationInfo {
 
         public static Reservation of(ReservationInfo.Request request){
             return Reservation.builder()
-                    .storeId(request.getStoreId())
-                    .reservationDate(request.getReservationDate())
                     .phoneNumber(request.getPhoneNumber())
-                    .memberId(request.getMemberId())
                     .customerCnt(request.getCustomerCnt())
-                    .timeslotId(request.getTimeslotId())
                     .build();
         }
     }
@@ -60,7 +54,7 @@ public class ReservationInfo {
         public static ReservationInfo.Response of(Reservation reservation){
             return Response.builder()
                     .customerCnt(reservation.getCustomerCnt())
-                    .reservationDate(reservation.getReservationDate())
+                    .reservationDate(reservation.getTimeSlot().getTime())
                     .build();
         }
     }

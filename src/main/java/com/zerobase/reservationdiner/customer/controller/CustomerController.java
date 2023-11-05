@@ -5,8 +5,10 @@ import com.zerobase.reservationdiner.customer.dto.reservation.ReservationInfo;
 import com.zerobase.reservationdiner.customer.dto.store.StoreDetailInfo;
 import com.zerobase.reservationdiner.customer.dto.store.StoreInfo;
 
+import com.zerobase.reservationdiner.customer.exception.store.StoreException;
 import com.zerobase.reservationdiner.customer.service.reservation.ReservationService;
 import com.zerobase.reservationdiner.customer.service.store.StoreService;
+import com.zerobase.reservationdiner.customer.type.StoreErrorCode;
 import com.zerobase.reservationdiner.owner.exception.OwnerException;
 import com.zerobase.reservationdiner.owner.type.OwnerErrorCode;
 import jakarta.validation.Valid;
@@ -28,11 +30,10 @@ public class CustomerController {
     private final ReservationService reservationService;
 
     @GetMapping("/store")
-    public List<StoreInfo> getAllStore(@Valid @RequestBody CustomerSite site, BindingResult result,
-                                       @PathVariable(required = false) String findStoreName){
+    public List<StoreInfo> getAllStore(@Valid @RequestBody CustomerSite site, BindingResult result){
         checkBindResultErrors(result);
 
-        return storeService.getAllStore(site.getLatitude(), site.getLongtitude(),findStoreName);
+        return storeService.getAllStore(site.getLatitude(), site.getLongtitude(),site.getStoreName());
     }
 
     @GetMapping("/store/{storeId}")
@@ -50,9 +51,13 @@ public class CustomerController {
         return ResponseEntity.ok(reservationService.reservationStore(request));
     }
 
+    @GetMapping("/review")
+    @PreAuthorize
+    @PostMapping("/review")
+
     private static void checkBindResultErrors(BindingResult result) {
         if(result.hasErrors()){
-            throw new OwnerException(OwnerErrorCode.INVALID_STOREINFO);
+            throw new StoreException(StoreErrorCode.INVALID_STOREINFO);
         }
     }
 

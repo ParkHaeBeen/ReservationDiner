@@ -1,14 +1,16 @@
 package com.zerobase.reservationdiner.owner.service;
 
-import com.zerobase.reservationdiner.owner.dto.ReserveInfo;
-import com.zerobase.reservationdiner.owner.dto.StoreInput;
-import com.zerobase.reservationdiner.owner.dto.StoreOpen;
+import com.zerobase.reservationdiner.owner.dto.*;
+
+import java.util.List;
 
 public interface OwnerService {
 
-    void registerStore(StoreInput input);
+    StoreRegister registerStore(StoreInput input);
 
     void openAndTimeSlotAdd(StoreOpen open);
 
     void permitReservation(ReserveInfo.Request request);
+
+    List<ReserveList.Response> getAllReservation(ReserveList.Request request);
 }

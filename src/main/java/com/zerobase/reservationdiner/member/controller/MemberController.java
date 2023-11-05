@@ -29,18 +29,19 @@ public class MemberController {
         checkBindResultErrors(result, INVALID_MEMBERINFO);
 
         MemberInfo.Response member = memberService.authenticate(loginInfo);
-        String token = tokenProvider.generateToken(member.getMemberName(), member.getRoles());
+
+        String token = tokenProvider.generateToken(member.getMemberId(), member.getRoles());
         log.info("login success");
         return ResponseEntity.ok(token);
     }
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody MemberInput memberInput, BindingResult result){
+    public ResponseEntity<String> register(@Valid @RequestBody MemberInput memberInput, BindingResult result){
         checkBindResultErrors(result, INVALIE_NEWMEMBERINFO);
 
         memberService.register(memberInput);
-        return ResponseEntity.ok(memberInput);
+        return ResponseEntity.ok(memberInput.getName());
     }
 
     private static void checkBindResultErrors(BindingResult result, MemberErrorCode invalidMemberinfo) {

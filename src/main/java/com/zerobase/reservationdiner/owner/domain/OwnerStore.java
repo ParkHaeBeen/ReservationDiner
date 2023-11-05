@@ -1,5 +1,6 @@
 package com.zerobase.reservationdiner.owner.domain;
 
+import com.zerobase.reservationdiner.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -25,8 +26,10 @@ public class OwnerStore {
     @GeneratedValue
     private Long id;
 
-    @NotBlank
-    private String ownerId;
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "owner_Id")
+    private Member owner;
 
     @NotBlank
     private String storeName;
@@ -51,5 +54,5 @@ public class OwnerStore {
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "store")
     private List<TimeSlot> timeSlots=new ArrayList<>();
 
-    private boolean openStatus=false;
+    private Boolean openStatus=false;
 }

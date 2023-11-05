@@ -14,4 +14,5 @@ public class CustomerSite {
     private double latitude;
 
     private double longtitude;
+    private String storeName;
 }
