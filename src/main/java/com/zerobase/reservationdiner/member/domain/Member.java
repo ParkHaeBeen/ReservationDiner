@@ -2,6 +2,7 @@ package com.zerobase.reservationdiner.member.domain;
 
 import com.zerobase.reservationdiner.common.domain.BaseEntity;
 import com.zerobase.reservationdiner.customer.domain.Reservation;
+import com.zerobase.reservationdiner.customer.domain.Review;
 import com.zerobase.reservationdiner.owner.domain.OwnerStore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -50,6 +51,9 @@ public class Member extends BaseEntity implements UserDetails {
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "owner")
     private List<OwnerStore> stores=new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "member")
+    private List<Review> reviews=new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

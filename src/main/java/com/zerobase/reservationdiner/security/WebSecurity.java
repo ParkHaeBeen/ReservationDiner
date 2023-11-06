@@ -26,7 +26,8 @@ public class WebSecurity{
     @Bean
     public WebSecurityCustomizer cofigure(){
         return (web)->web.ignoring()
-                .requestMatchers("/mysql-console/**","/member/register","/member/login");
+                .requestMatchers("/mysql-console/**","/member/**","/store/**","/kiosk/**"
+                ,"/fcm.googleapis.com/**");
     }
 
     @Bean
@@ -37,8 +38,6 @@ public class WebSecurity{
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .requestMatchers("/").permitAll()
-                .requestMatchers("/member/**","/store/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
