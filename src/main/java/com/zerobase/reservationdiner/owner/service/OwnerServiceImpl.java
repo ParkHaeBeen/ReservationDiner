@@ -98,7 +98,7 @@ public class OwnerServiceImpl implements OwnerService{
     }
 
     @Override
-    public void permitReservation(ReserveInfo.Request request) {
+    public boolean permitReservation(ReserveInfo.Request request) {
         Reservation reservation = reservationRepository.findById(request.getReservationId()).
                 orElseThrow(() -> new ReservePermitException(ReservePermitErrorCode.NOT_EXIST_RESERVE));
 
@@ -113,6 +113,8 @@ public class OwnerServiceImpl implements OwnerService{
             timeSlotRepository.save(timeSlot);
         }
         reservationRepository.save(reservation);
+
+        return reservation.getOwnercheck();
     }
 
     private static void validationPermitReservation(boolean reservationPermit,TimeSlot timeSlot, Reservation reservation) {
