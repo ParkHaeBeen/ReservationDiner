@@ -10,6 +10,7 @@ import com.zerobase.reservationdiner.fcmn.dto.FcmMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -26,11 +27,14 @@ public class FcmService {
 
     private final StringRedisTemplate redisTemplate;
     private static final long TOKEN_EXPIRATION = 3500;
+
+    @Value("${firebase.key-path}")
+    String fcmKeyPath;
     public String getAccessToken(Long storeId) throws IOException {
 
 
         GoogleCredentials   googleCredentials = GoogleCredentials
-                .fromStream(new ClassPathResource("serviceAccountKey.json").getInputStream())
+                .fromStream(new ClassPathResource(fcmKeyPath).getInputStream())
                 .createScoped(Arrays.asList("https://www.googleapis.com/auth/cloud-platform"));
 
         googleCredentials.refreshIfExpired();
@@ -43,15 +47,17 @@ public class FcmService {
 
     public Message makeMessage(FcmMessage.Request request) throws JsonProcessingException {
         Message message=Message.builder()
-                .putData("name",request.getUserName())
                 .putData("reservationTime", String.valueOf(request.getReserveTime()))
+                .putData("name",request.getUserName())
                 .setToken(request.getTargetToken())
                 .build();
+        log.info("message ={}",message);
         return message;
     }
 
     public String sendMessage(FcmMessage.Request request) throws JsonProcessingException, FirebaseMessagingException {
         String send = FirebaseMessaging.getInstance().send(makeMessage(request));
+        log.info("fcm message ={}",send);
         return send;
     }
 

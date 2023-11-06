@@ -22,7 +22,7 @@ public class TimeSlot {
     @JoinColumn(name = "ownerstore_Id")
     private OwnerStore store;
 
-    @OneToOne(fetch = FetchType.EAGER,mappedBy = "timeSlot")
+    @OneToOne(fetch = FetchType.EAGER,mappedBy = "timeSlot",cascade = CascadeType.ALL)
     private Reservation reservation;
 
     @NotNull

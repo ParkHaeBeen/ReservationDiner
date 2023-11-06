@@ -27,7 +27,7 @@ public class Reservation extends BaseEntity {
 
     @NotBlank
     @JoinColumn(name = "member_Id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     private Member member;
 
     @NotNull
@@ -38,7 +38,7 @@ public class Reservation extends BaseEntity {
 
     @NotNull
     @JoinColumn(name = "timesolt_Id")
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private TimeSlot timeSlot;
 
     private Boolean ownercheck=false;

@@ -15,6 +15,7 @@ import com.zerobase.reservationdiner.owner.domain.TimeSlot;
 import com.zerobase.reservationdiner.owner.repository.timeslot.TimeSlotRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class ReservationServiceImpl implements ReservationService{
 
     private final ReservationRepository reservationRepository;
@@ -59,17 +61,19 @@ public class ReservationServiceImpl implements ReservationService{
         return  reserveSuccess;
     }
     private void sendAlarmToOwner(Reservation reserveSuccess) {
-        if(redisTemplate.opsForValue().get(reserveSuccess.getTimeSlot().getStore().getId())==null){
+        if(redisTemplate.opsForValue().get(String.valueOf(reserveSuccess.getTimeSlot().getStore().getId()))==null){
             try {
                 String accessToken = fcmService.getAccessToken(reserveSuccess.getTimeSlot().getStore().getId());
+                log.info("token={}",accessToken);
                 sendMessageToOwner(reserveSuccess, accessToken);
-
             } catch (IOException | FirebaseMessagingException e) {
                 throw new RuntimeException(e);
             }
         }else{
-            String accessToken = redisTemplate.opsForValue().get(reserveSuccess.getTimeSlot().getStore().getId());
+            String accessToken = redisTemplate.opsForValue().get(String.valueOf(reserveSuccess.getTimeSlot().getStore().getId()));
+            log.info("token={}",accessToken);
             try {
+
                 sendMessageToOwner(reserveSuccess, accessToken);
 
             } catch (IOException | FirebaseMessagingException e) {
