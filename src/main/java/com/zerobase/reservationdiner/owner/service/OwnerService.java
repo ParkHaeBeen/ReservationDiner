@@ -10,7 +10,7 @@ public interface OwnerService {
 
     void openAndTimeSlotAdd(StoreOpen open);
 
-    void permitReservation(ReserveInfo.Request request);
+    boolean permitReservation(ReserveInfo.Request request);
 
     List<ReserveList.Response> getAllReservation(ReserveList.Request request);
 }

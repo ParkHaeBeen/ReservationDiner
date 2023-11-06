@@ -46,9 +46,9 @@ public class OwnerController {
     public ResponseEntity<?> permitReserve(@Valid @RequestBody ReserveInfo.Request request,BindingResult result){
         checkBindResultErrors(result);
 
-        ownerService.permitReservation(request);
+        boolean permit = ownerService.permitReservation(request);
 
-        return ResponseEntity.ok("succeed");
+        return ResponseEntity.ok(permit);
     }
 
     @GetMapping("/reservations")
