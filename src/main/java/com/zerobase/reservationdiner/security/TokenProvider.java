@@ -6,7 +6,10 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.HttpEntity;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
+import org.springframework.web.method.HandlerMethod;
 
 @Component
 @RequiredArgsConstructor
@@ -25,6 +29,7 @@ public class TokenProvider {
     private static final long TOKEN_EXPIRE_TIME=1000*60*60*5;
     private static final String KEY_ROLE="roles";
     private final MemberService memberService;
+
 
     public String generateToken(String username, List<String> roles){
         Claims claims= Jwts.claims().setSubject(username);
